@@ -1,0 +1,135 @@
+class Item {
+    String name;
+    int quantity;
+    double price;
+    Item next, prev;
+
+    public Item(String name, int quantity, double price) {
+        this.name = name;
+        this.quantity = quantity;
+        this.price = price;
+        this.next = this.prev = null;
+    }
+}
+
+class Order {
+    private Item head;
+
+    public Order() {
+        head = null;
+    }
+
+    
+    public void addItem(String name, int quantity, double price) {
+        Item newItem = new Item(name, quantity, price);
+        if (head == null) {
+            head = newItem;
+            head.next = head.prev = head;
+        } else {
+            Item last = head.prev;
+            last.next = newItem;
+            newItem.prev = last;
+            newItem.next = head;
+            head.prev = newItem;
+        }
+        System.out.println("Item added: " + name);
+    }
+
+    // Remove item from the order
+    public void removeItem(String name) {
+        if (head == null) {
+            System.out.println("Order is empty!");
+            return;
+        }
+        Item current = head;
+        do {
+            if (current.name.equals(name)) {
+                if (current == head && current.next == head) {
+                    head = null; // single element in the list
+                } else {
+                    current.prev.next = current.next;
+                    current.next.prev = current.prev;
+                    if (current == head) {
+                        head = current.next;
+                    }
+                }
+                System.out.println("Item removed: " + name);
+                return;
+            }
+            current = current.next;
+        } while (current != head);
+
+        System.out.println("Item not found: " + name);
+    }
+
+    // Update item details
+    public void updateItem(String name, int newQuantity, double newPrice) {
+        Item current = head;
+        if (current == null) {
+            System.out.println("Order is empty!");
+            return;
+        }
+        do {
+            if (current.name.equals(name)) {
+                current.quantity = newQuantity;
+                current.price = newPrice;
+                System.out.println("Item updated: " + name);
+                return;
+            }
+            current = current.next;
+        } while (current != head);
+
+        System.out.println("Item not found: " + name);
+    }
+
+    // Search for an item
+    public void searchItem(String name) {
+        Item current = head;
+        if (current == null) {
+            System.out.println("Order is empty!");
+            return;
+        }
+        do {
+            if (current.name.equals(name)) {
+                System.out.println("Item found: " + name + ", Quantity: " + current.quantity + ", Price: " + current.price);
+                return;
+            }
+            current = current.next;
+        } while (current != head);
+
+        System.out.println("Item not found: " + name);
+    }
+
+    public void displayOrder() {
+        if (head == null) {
+            System.out.println("Order is empty!");
+            return;
+        }
+        Item current = head;
+        System.out.println("Order contents:");
+        do {
+            System.out.println("Item: " + current.name + ", Quantity: " + current.quantity + ", Price: " + current.price);
+            current = current.next;
+        } while (current != head);
+    }
+}
+
+public class RetailManagementSystem {
+    public static void main(String[] args) {
+        Order order = new Order();
+        
+        order.addItem("Laptop", 1, 1500.00);
+        order.addItem("Mouse", 2, 25.50);
+        order.addItem("Keyboard", 1, 45.00);
+        
+        order.displayOrder();
+        
+        order.updateItem("Mouse", 3, 24.50);
+        order.displayOrder();
+        
+        order.removeItem("Keyboard");
+        order.displayOrder();
+        
+        order.searchItem("Laptop");
+    }
+}
