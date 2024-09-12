@@ -39,7 +39,7 @@ class DoublyCircularLinkedList:
             self.head.prev = new_node
         print(f"Item added: {name}")
 
-    # Remove an item by name
+    
     def remove_item(self, name):
         if self.head is None:
             print("No items to remove.")
@@ -65,7 +65,7 @@ class DoublyCircularLinkedList:
                 break
         print(f"Item not found: {name}")
 
-    # Update an item by name
+    
     def update_item(self, name, new_quantity, new_price):
         if self.head is None:
             print("No items to update.")
@@ -83,7 +83,7 @@ class DoublyCircularLinkedList:
                 break
         print(f"Item not found: {name}")
 
-    # Display all items in the order
+    
     def display_order(self):
         if self.head is None:
             print("No items in the order.")
@@ -118,21 +118,20 @@ class DoublyCircularLinkedList:
 if __name__ == "__main__":
     order_list = DoublyCircularLinkedList()
 
-    # Add items
+    
     order_list.add_item("Laptop", 2, 999.99)
     order_list.add_item("Headphones", 5, 199.99)
     order_list.add_item("Mouse", 3, 49.99)
 
-    # Display the order
+    
     order_list.display_order()
 
-    # Update an item
     order_list.update_item("Headphones", 4, 179.99)
     order_list.display_order()
 
-    # Search for an item
+    
     order_list.search_item("Mouse")
 
-    # Remove an item
+    
     order_list.remove_item("Laptop")
     order_list.display_order()
