@@ -8,30 +8,26 @@ class Item:
         return f"Item Name: {self.name}, Quantity: {self.quantity}, Price: ${self.price:.2f}"
 
 
-
+class Node:
     def __init__(self, item):
         self.item = item
         self.prev = None
         self.next = None
 
 
-
 class DoublyCircularLinkedList:
     def __init__(self):
         self.head = None
 
-    
     def add_item(self, name, quantity, price):
         new_item = Item(name, quantity, price)
         new_node = Node(new_item)
 
         if self.head is None:
-            
             self.head = new_node
             self.head.next = self.head
             self.head.prev = self.head
         else:
-            
             last = self.head.prev
             last.next = new_node
             new_node.prev = last
@@ -39,7 +35,6 @@ class DoublyCircularLinkedList:
             self.head.prev = new_node
         print(f"Item added: {name}")
 
-    
     def remove_item(self, name):
         if self.head is None:
             print("No items to remove.")
@@ -49,7 +44,6 @@ class DoublyCircularLinkedList:
         while True:
             if current.item.name == name:
                 if current == self.head and self.head.next == self.head:
-                    #  only one item
                     self.head = None
                 else:
                     prev_node = current.prev
@@ -65,7 +59,6 @@ class DoublyCircularLinkedList:
                 break
         print(f"Item not found: {name}")
 
-    
     def update_item(self, name, new_quantity, new_price):
         if self.head is None:
             print("No items to update.")
@@ -83,7 +76,6 @@ class DoublyCircularLinkedList:
                 break
         print(f"Item not found: {name}")
 
-    
     def display_order(self):
         if self.head is None:
             print("No items in the order.")
@@ -97,7 +89,6 @@ class DoublyCircularLinkedList:
             if current == self.head:
                 break
 
-    
     def search_item(self, name):
         if self.head is None:
             print("No items to search.")
@@ -114,24 +105,19 @@ class DoublyCircularLinkedList:
         print(f"Item not found: {name}")
 
 
-# Main function to test the functionality
 if __name__ == "__main__":
     order_list = DoublyCircularLinkedList()
 
-    
     order_list.add_item("Laptop", 2, 999.99)
     order_list.add_item("Headphones", 5, 199.99)
     order_list.add_item("Mouse", 3, 49.99)
 
-    
     order_list.display_order()
 
     order_list.update_item("Headphones", 4, 179.99)
     order_list.display_order()
 
-    
     order_list.search_item("Mouse")
 
-    
     order_list.remove_item("Laptop")
     order_list.display_order()
