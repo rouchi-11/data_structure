@@ -1,135 +1,138 @@
-class Item {
-    String name;
-    int quantity;
-    double price;
-    Item next, prev;
+class Item:
+    def __init__(self, name, quantity, price):
+        self.name = name
+        self.quantity = quantity
+        self.price = price
 
-    public Item(String name, int quantity, double price) {
-        this.name = name;
-        this.quantity = quantity;
-        this.price = price;
-        this.next = this.prev = null;
-    }
-}
+    def __str__(self):
+        return f"Item Name: {self.name}, Quantity: {self.quantity}, Price: ${self.price:.2f}"
 
-class Order {
-    private Item head;
 
-    public Order() {
-        head = null;
-    }
+
+    def __init__(self, item):
+        self.item = item
+        self.prev = None
+        self.next = None
+
+
+
+class DoublyCircularLinkedList:
+    def __init__(self):
+        self.head = None
 
     
-    public void addItem(String name, int quantity, double price) {
-        Item newItem = new Item(name, quantity, price);
-        if (head == null) {
-            head = newItem;
-            head.next = head.prev = head;
-        } else {
-            Item last = head.prev;
-            last.next = newItem;
-            newItem.prev = last;
-            newItem.next = head;
-            head.prev = newItem;
-        }
-        System.out.println("Item added: " + name);
-    }
+    def add_item(self, name, quantity, price):
+        new_item = Item(name, quantity, price)
+        new_node = Node(new_item)
 
-    // Remove item from the order
-    public void removeItem(String name) {
-        if (head == null) {
-            System.out.println("Order is empty!");
-            return;
-        }
-        Item current = head;
-        do {
-            if (current.name.equals(name)) {
-                if (current == head && current.next == head) {
-                    head = null; // single element in the list
-                } else {
-                    current.prev.next = current.next;
-                    current.next.prev = current.prev;
-                    if (current == head) {
-                        head = current.next;
-                    }
-                }
-                System.out.println("Item removed: " + name);
-                return;
-            }
-            current = current.next;
-        } while (current != head);
+        if self.head is None:
+            
+            self.head = new_node
+            self.head.next = self.head
+            self.head.prev = self.head
+        else:
+            
+            last = self.head.prev
+            last.next = new_node
+            new_node.prev = last
+            new_node.next = self.head
+            self.head.prev = new_node
+        print(f"Item added: {name}")
 
-        System.out.println("Item not found: " + name);
-    }
+    # Remove an item by name
+    def remove_item(self, name):
+        if self.head is None:
+            print("No items to remove.")
+            return
 
-    // Update item details
-    public void updateItem(String name, int newQuantity, double newPrice) {
-        Item current = head;
-        if (current == null) {
-            System.out.println("Order is empty!");
-            return;
-        }
-        do {
-            if (current.name.equals(name)) {
-                current.quantity = newQuantity;
-                current.price = newPrice;
-                System.out.println("Item updated: " + name);
-                return;
-            }
-            current = current.next;
-        } while (current != head);
+        current = self.head
+        while True:
+            if current.item.name == name:
+                if current == self.head and self.head.next == self.head:
+                    #  only one item
+                    self.head = None
+                else:
+                    prev_node = current.prev
+                    next_node = current.next
+                    prev_node.next = next_node
+                    next_node.prev = prev_node
+                    if current == self.head:
+                        self.head = next_node
+                print(f"Item removed: {name}")
+                return
+            current = current.next
+            if current == self.head:
+                break
+        print(f"Item not found: {name}")
 
-        System.out.println("Item not found: " + name);
-    }
+    # Update an item by name
+    def update_item(self, name, new_quantity, new_price):
+        if self.head is None:
+            print("No items to update.")
+            return
 
-    // Search for an item
-    public void searchItem(String name) {
-        Item current = head;
-        if (current == null) {
-            System.out.println("Order is empty!");
-            return;
-        }
-        do {
-            if (current.name.equals(name)) {
-                System.out.println("Item found: " + name + ", Quantity: " + current.quantity + ", Price: " + current.price);
-                return;
-            }
-            current = current.next;
-        } while (current != head);
+        current = self.head
+        while True:
+            if current.item.name == name:
+                current.item.quantity = new_quantity
+                current.item.price = new_price
+                print(f"Item updated: {name}")
+                return
+            current = current.next
+            if current == self.head:
+                break
+        print(f"Item not found: {name}")
 
-        System.out.println("Item not found: " + name);
-    }
+    # Display all items in the order
+    def display_order(self):
+        if self.head is None:
+            print("No items in the order.")
+            return
 
-    public void displayOrder() {
-        if (head == null) {
-            System.out.println("Order is empty!");
-            return;
-        }
-        Item current = head;
-        System.out.println("Order contents:");
-        do {
-            System.out.println("Item: " + current.name + ", Quantity: " + current.quantity + ", Price: " + current.price);
-            current = current.next;
-        } while (current != head);
-    }
-}
+        current = self.head
+        print("Order Details:")
+        while True:
+            print(current.item)
+            current = current.next
+            if current == self.head:
+                break
 
-public class RetailManagementSystem {
-    public static void main(String[] args) {
-        Order order = new Order();
-        
-        order.addItem("Laptop", 1, 1500.00);
-        order.addItem("Mouse", 2, 25.50);
-        order.addItem("Keyboard", 1, 45.00);
-        
-        order.displayOrder();
-        
-        order.updateItem("Mouse", 3, 24.50);
-        order.displayOrder();
-        
-        order.removeItem("Keyboard");
-        order.displayOrder();
-        
-        order.searchItem("Laptop");
-    }
-}
+    
+    def search_item(self, name):
+        if self.head is None:
+            print("No items to search.")
+            return
+
+        current = self.head
+        while True:
+            if current.item.name == name:
+                print(f"Item found: {current.item}")
+                return
+            current = current.next
+            if current == self.head:
+                break
+        print(f"Item not found: {name}")
+
+
+# Main function to test the functionality
+if __name__ == "__main__":
+    order_list = DoublyCircularLinkedList()
+
+    # Add items
+    order_list.add_item("Laptop", 2, 999.99)
+    order_list.add_item("Headphones", 5, 199.99)
+    order_list.add_item("Mouse", 3, 49.99)
+
+    # Display the order
+    order_list.display_order()
+
+    # Update an item
+    order_list.update_item("Headphones", 4, 179.99)
+    order_list.display_order()
+
+    # Search for an item
+    order_list.search_item("Mouse")
+
+    # Remove an item
+    order_list.remove_item("Laptop")
+    order_list.display_order()
