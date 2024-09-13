@@ -1,0 +1,58 @@
+import numpy as np
+
+grades_matrix = [
+    [0, 0, 0, 0],
+    [85, 0, 0, 0],
+    [0, 0, 0, 92],
+    [0, 0, 0, 0]
+]
+
+def calculate_subject_averages(matrix):
+    subject_averages = []
+    num_subjects = len(matrix[0])
+
+    for col in range(num_subjects):
+        total = 0
+        count = 0
+        for row in range(len(matrix)):
+            if matrix[row][col] != 0:
+                total += matrix[row][col]
+                count += 1
+        avg = total / count if count != 0 else 0
+        subject_averages.append(avg)
+
+    return subject_averages
+
+def find_student_with_highest_grade(matrix):
+    highest_grade = -1
+    student_index = -1
+    subject_index = -1
+
+    for row in range(len(matrix)):
+        for col in range(len(matrix[0])):
+            if matrix[row][col] > highest_grade:
+                highest_grade = matrix[row][col]
+                student_index = row
+                subject_index = col
+
+    return student_index, subject_index, highest_grade
+
+def find_subject_with_highest_average(subject_averages):
+    highest_avg = max(subject_averages)
+    subject_index = subject_averages.index(highest_avg)
+    return subject_index, highest_avg
+
+subject_averages = calculate_subject_averages(grades_matrix)
+print("Average grade for each subject:", subject_averages)
+
+student_index, subject_index, highest_grade = find_student_with_highest_grade(grades_matrix)
+if highest_grade != -1:
+    print(f"Student {student_index + 1} has the highest grade of {highest_grade} in subject {subject_index + 1}")
+else:
+    print("No grades found.")
+
+subject_index, highest_avg = find_subject_with_highest_average(subject_averages)
+if highest_avg != 0:
+    print(f"Subject {subject_index + 1} has the highest average grade of {highest_avg}")
+else:
+    print("No valid subjects found with average grades.")
