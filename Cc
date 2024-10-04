@@ -1,0 +1,71 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class CircularQueue:
+    def __init__(self):
+        self.front = None
+        self.rear = None
+
+    def enqueue(self, item):
+        new_node = Node(item)
+        if self.front is None:
+            self.front = new_node
+            self.rear = new_node
+            new_node.next = self.front
+        else:
+            self.rear.next = new_node
+            self.rear = new_node
+            self.rear.next = self.front
+        print(f"{item} enqueued to the circular queue.")
+
+    def dequeue(self):
+        if self.front is None:
+            print("Queue is empty, nothing to dequeue.")
+            return None
+        if self.front == self.rear:
+            dequeued_item = self.front.data
+            self.front = None
+            self.rear = None
+        else:
+            dequeued_item = self.front.data
+            self.front = self.front.next
+            self.rear.next = self.front
+        return dequeued_item
+
+    def display(self):
+        if self.front is None:
+            print("Queue is empty.")
+        else:
+            temp = self.front
+            queue_elements = []
+            while True:
+                queue_elements.append(temp.data)
+                temp = temp.next
+                if temp == self.front:
+                    break
+            print("Current queue:", queue_elements)
+
+q = CircularQueue()
+
+q.enqueue(10)
+q.enqueue(20)
+q.enqueue(30)
+
+q.display()
+
+dequeued_item = q.dequeue()
+print(f"Dequeued item: {dequeued_item}")
+q.display()
+
+dequeued_item = q.dequeue()
+print(f"Dequeued item: {dequeued_item}")
+q.display()
+
+q.enqueue(40)
+q.display()
+
+dequeued_item = q.dequeue()
+print(f"Dequeued item: {dequeued_item}")
+q.display()
