@@ -1,0 +1,64 @@
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+
+class Queue:
+    def __init__(self):
+        self.front = None
+        self.rear = None
+
+    def enqueue(self, item):
+        new_node = Node(item)
+        if self.rear is None:
+            self.front = self.rear = new_node
+        else:
+            self.rear.next = new_node
+            self.rear = new_node
+        print(f"{item} enqueued to the queue.")
+
+    def dequeue(self):
+        if self.front is None:
+            print("Queue is empty, nothing to dequeue.")
+            return None
+        dequeued_item = self.front.data
+        self.front = self.front.next
+        if self.front is None:
+            self.rear = None
+        return dequeued_item
+
+    def display(self):
+        if self.front is None:
+            print("Queue is empty.")
+        else:
+            temp = self.front
+            queue_elements = []
+            while temp:
+                queue_elements.append(temp.data)
+                temp = temp.next
+            print("Current queue:", queue_elements)
+
+q = Queue()
+
+while True:
+    print("\n1. Enqueue")
+    print("2. Dequeue")
+    print("3. Display queue")
+    print("4. Exit")
+    
+    choice = int(input("Enter your choice: "))
+
+    if choice == 1:
+        item = input("Enter the item to enqueue: ")
+        q.enqueue(item)
+    elif choice == 2:
+        dequeued_item = q.dequeue()
+        if dequeued_item is not None:
+            print(f"Dequeued item: {dequeued_item}")
+    elif choice == 3:
+        q.display()
+    elif choice == 4:
+        print("Exiting...")
+        break
+    else:
+        print("Invalid choice, please try again.")
