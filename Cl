@@ -1,0 +1,72 @@
+
+
+class CustomerRequest:
+    def __init__(self, request_id, customer_name, service_type):
+        self.request_id = request_id
+        self.customer_name = customer_name
+        self.service_type = service_type
+        self.status = "Pending"
+
+    def __str__(self):
+        return f"Request ID: {self.request_id}, Customer Name: {self.customer_name}, Service Type: {self.service_type}, Status: {self.status}"
+
+class CallCenter:
+    def __init__(self):
+        self.queue = deque()
+
+    def add_request(self, request_id, customer_name, service_type):
+        new_request = CustomerRequest(request_id, customer_name, service_type)
+        self.queue.append(new_request)
+        print(f"New request added: {new_request}")
+
+    def process_request(self):
+        if self.queue:
+            current_request = self.queue.popleft()
+            current_request.status = "Processing"
+            print(f"Processing: {current_request}")
+            current_request.status = "Completed"
+            print(f"Completed: {current_request}")
+        else:
+            print("No requests in the queue to process.")
+
+    def show_pending_requests(self):
+        if self.queue:
+            print("\nPending requests in the queue:")
+            for request in self.queue:
+                print(request)
+        else:
+            print("No pending requests.")
+
+def main():
+    call_center = CallCenter()
+
+    while True:
+        print("\nCall Center Management System")
+        print("1. Add new request")
+        print("2. Process next request")
+        print("3. Show pending requests")
+        print("4. Exit")
+        choice = input("Enter your choice: ")
+
+        if choice == '1':
+            request_id = int(input("Enter request ID: "))
+            customer_name = input("Enter customer name: ")
+            service_type = input("Enter service type: ")
+            call_center.add_request(request_id, customer_name, service_type)
+
+        elif choice == '2':
+            call_center.process_request()
+
+        elif choice == '3':
+            call_center.show_pending_requests()
+
+        elif choice == '4':
+            print("Exiting the system.")
+            break
+
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
+```
