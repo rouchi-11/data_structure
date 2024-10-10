@@ -1,0 +1,80 @@
+class Node:
+    def __init__(self, id,c_name,order_name):
+        self.id = id
+        self.c_name=c_name
+        self.order_name=order_name
+        self.next = None
+
+class OrderProcessing:
+    def __init__(self):
+        self.front = None
+        self.rear = None
+
+    def add_order(self,id,c_name,order_name):
+        new_node = Node(order_name)
+        if self.front is None:
+            self.front = new_node
+            self.rear = new_node
+            new_node.next = self.front
+        else:
+            self.rear.next = new_node
+            self.rear = new_node
+            self.rear.next = self.front
+        print(f"{order_name}  added to your order list.")
+
+    def remove_order(self):
+        if self.front is None:
+            print("Order list is empty, nothing to dequeue.")
+            return None
+        if self.front == self.rear:
+            dequeued_item = self.front.data
+            self.front = None
+            self.rear = None
+        else:
+            dequeued_item = self.front.data
+            self.front = self.front.next
+            self.rear.next = self.front
+        return dequeued_item
+
+    def display(self):
+        if self.front is None:
+            print("Order is empty.")
+        else:
+            temp = self.front
+            queue_elements = []
+            while True:
+                queue_elements.append(temp.data)
+                temp = temp.next
+                if temp == self.front:
+                    break
+            print("Current order is:", queue_elements)
+
+q = OrderProcessing()
+
+while True:
+    print("\n1. Add the food item to your order")
+    print("2. Remove the food item from your list")
+    print("3. Display the final order")
+    print("4. Exit")
+    
+    choice = int(input("Enter your choice: "))
+    if choice ==1:
+        name=input("Enter the customer name:")
+        id=input("Enter the order id:")
+        
+
+    elif choice == 2:
+        item = input("Enter the food item: ")
+        q.add_order(id)
+    elif choice == 3:
+        dequeued_item = q.remove_order()
+        if dequeued_item is not None:
+            print(f"The food item removed is: {dequeued_item}")
+    elif choice == 4:
+        q.display()
+        print("This is your final order.Visit us again...")
+    elif choice == 5:
+        print("Exiting...")
+        break
+    else:
+        print("Invalid choice, please try again.")
