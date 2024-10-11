@@ -1,0 +1,92 @@
+from datetime import datetime, timedelta
+
+class Plan:
+    def __init__(self, name, monthly_rate, speed, data_limit):
+        self.name = name
+        self.monthly_rate = monthly_rate
+        self.speed = speed
+        self.data_limit = data_limit
+
+    def __str__(self):
+        return (f"Plan Name: {self.name}\n"
+                f"Monthly Rate: {self.monthly_rate}\n"
+                f"Internet Speed: {self.speed} Mbps\n"
+                f"Data Limit: {self.data_limit} GB\n")
+
+
+class ServiceProvider:
+    def __init__(self, name):
+        self.name = name
+        self.plans = {
+            "Basic": Plan("Basic", 50, 10, 100),
+            "Premium": Plan("Premium", 100, 50, 500),
+            "Ultimate": Plan("Ultimate", 150, 100, 1000),
+        }
+        self.customers = {}
+
+    def display_plans(self):
+        print("Available Plans:")
+        for plan in self.plans.values():
+            print(plan)
+
+    def select_plan(self, customer_id, plan_name):
+        if plan_name in self.plans:
+            start_date = datetime.now()
+            end_date = start_date + timedelta(days=30)  # Assume a 30-day plan duration
+            self.customers[customer_id] = {
+                "plan": self.plans[plan_name],
+                "start_date": start_date,
+                "end_date": end_date,
+                "active": True,
+            }
+            print(f"Customer {customer_id} selected the {plan_name} plan.")
+            print(f"Start Date: {start_date.strftime('%Y-%m-%d')}, End Date: {end_date.strftime('%Y-%m-%d')}")
+        else:
+            print("Invalid plan selected.")
+
+    def get_plan_details(self, customer_id):
+        customer = self.customers.get(customer_id)
+        if customer:
+            print(customer["plan"])
+            print(f"Start Date: {customer['start_date'].strftime('%Y-%m-%d')}")
+            print(f"End Date: {customer['end_date'].strftime('%Y-%m-%d')}")
+        else:
+            print("Customer not found or no plan selected.")
+
+    def renew_plan(self, customer_id):
+        customer = self.customers.get(customer_id)
+        if customer and customer["active"]:
+            customer["start_date"] = datetime.now()
+            customer["end_date"] = customer["start_date"] + timedelta(days=30)
+            print(f"Renewed {customer['plan'].name} plan for Customer {customer_id}.")
+            print(f"New Start Date: {customer['start_date'].strftime('%Y-%m-%d')}, New End Date: {customer['end_date'].strftime('%Y-%m-%d')}")
+        else:
+            print("No active plan to renew.")
+
+    def shut_down_service(self, customer_id):
+        if customer_id in self.customers:
+            del self.customers[customer_id]
+            print(f"Service for Customer {customer_id} has been shut down.")
+        else:
+            print("Customer not found.")
+
+if __name__ == "__main__":
+    provider = ServiceProvider("MyISP")
+
+    provider.display_plans()
+
+    while True:
+        customer_id = input("Enter Customer ID: ").strip()
+        action = input("Do you want to (select) a plan, (view) your plan details, (renew), or (shut down) the service? ").strip().lower()
+       
+        if action == "select":
+            plan_name = input("Enter the plan name (Basic, Premium, Ultimate): ")
+            provider.select_plan(customer_id, plan_name)
+        elif action == "view":
+            provider.get_plan_details(customer_id)
+        elif action == "renew":
+            provider.renew_plan(customer_id)
+        elif action == "shut down":
+            provider.shut_down_service(customer_id)
+        else:
+            print("Invalid action.")
