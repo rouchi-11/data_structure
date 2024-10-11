@@ -1,0 +1,96 @@
+
+class Node:
+    def __init__(self, id, c_name, order_name):
+        self.id = id
+        self.c_name = c_name
+        self.order_name = order_name
+        self.next = None
+
+class OrderProcessing:
+    dict={"Pizza":"200","Burger":"70","Cake":"300","Pasta":"190"}
+    def __init__(self):
+        self.front = None
+        self.rear = None
+
+    def add_order(self, id, c_name, order_name):
+        new_node = Node(id, c_name, order_name)
+        
+        if self.front is None:
+            self.front = new_node
+            self.rear = new_node
+            new_node.next = self.front
+            
+            if order_name ==dict:
+                print("The cost of the item is"+{dict})
+            else:
+                print("Wrong item entered")
+                
+        else:
+            self.rear.next = new_node
+            self.rear = new_node
+            self.rear.next = self.front
+        print(f"Order '{order_name}' for customer '{c_name}' added to your order list.")
+
+    def remove_order(self):
+        if self.front is None:
+            print("Order list is empty, nothing to remove.")
+            return None
+        if self.front == self.rear:
+            removed_order = self.front
+            self.front = None
+            self.rear = None
+        else:
+            removed_order = self.front
+            self.front = self.front.next
+            self.rear.next = self.front
+        return removed_order
+
+    def display(self):
+        if self.front is None:
+            print("Order list is empty.")
+            return
+        temp = self.front
+        order_list = []
+        while True:
+            order_list.append(f"[ID: {temp.id}, Customer: {temp.c_name}, Order: {temp.order_name}]")
+            temp = temp.next
+            if temp == self.front:
+                break
+        print("Current orders:")
+        for order in order_list:
+            print(order)
+
+q = OrderProcessing()
+
+
+while True:
+    print("1.View Menu")
+    print("2. Add a food item to your order")
+    print("3. Remove a food item from your list")
+    print("4. Display the final order")
+    print("5. Exit")
+    
+    choice = int(input("Enter your choice: "))
+    if choice==1:
+        print("The Menu is:1.Pizza=200 2.Burger=70 3.Cake=300 4.Pasta=250")
+    
+    elif choice == 2:
+        c_name = input("Enter the customer name: ")
+        id = input("Enter the order ID: ")
+        order_name = input("Enter the food item: ")
+        q.add_order(id, c_name, order_name)
+    
+    elif choice == 3:
+        removed_order = q.remove_order()
+        if removed_order:
+            print(f"Removed order: [ID: {removed_order.id}, Customer: {removed_order.c_name}, Order: {removed_order.order_name}]")
+    
+    elif choice == 4:
+        q.display()
+    
+    elif choice == 5:
+        print("Exiting...")
+        break
+    
+    else:
+        print("Invalid choice, please try again.")
