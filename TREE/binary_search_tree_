@@ -68,7 +68,7 @@ class tree:
             return root
 
     def display(self, root, level=0):
-        # Recursive function to display the tree in a structured format
+       
         if root != None:
             self.display(root.right, level + 1)
             print('     ' * level + f'|-- {root.data}')
