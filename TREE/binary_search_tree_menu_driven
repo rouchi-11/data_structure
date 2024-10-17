@@ -1,0 +1,207 @@
+from copy import deepcopy
+from collections import deque
+
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.left = None
+        self.right = None
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, root, data):
+        if root is None:
+            return Node(data)
+        if data == root.data:
+            print(f"Duplicate entry '{data}' ignored.")
+            return root
+        elif data < root.data:
+            root.left = self.insert(root.left, data)
+        else:
+            root.right = self.insert(root.right, data)
+        return root
+
+    def add(self, data):
+        self.root = self.insert(self.root, data)
+
+    def delete(self, root, data):
+        if root is None:
+            return root
+        if data < root.data:
+            root.left = self.delete(root.left, data)
+        elif data > root.data:
+            root.right = self.delete(root.right, data)
+        else:
+            if root.left is None:
+                return root.right
+            elif root.right is None:
+                return root.left
+            temp = self.find_min(root.right)
+            root.data = temp.data
+            root.right = self.delete(root.right, temp.data)
+        return root
+
+    def remove(self, data):
+        self.root = self.delete(self.root, data)
+
+    def search(self, root, data):
+        if root is None or root.data == data:
+            return root
+        if data < root.data:
+            return self.search(root.left, data)
+        return self.search(root.right, data)
+
+    def find(self, data):
+        return self.search(self.root, data)
+
+    def inorder(self, root):
+        if root is not None:
+            self.inorder(root.left)
+            print(root.data, end=' ')
+            self.inorder(root.right)
+
+    def display_inorder(self):
+        print("Inorder Traversal:", end=' ')
+        self.inorder(self.root)
+        print()
+
+    def depth(self, root):
+        if root is None:
+            return 0
+        left_depth = self.depth(root.left)
+        right_depth = self.depth(root.right)
+        return max(left_depth, right_depth) + 1
+
+    def display_depth(self):
+        print(f"Depth of the tree: {self.depth(self.root)}")
+
+    def mirror(self, root):
+        if root is None:
+            return None
+        root.left, root.right = self.mirror(root.right), self.mirror(root.left)
+        return root
+
+    def display_mirror_image(self):
+        print("Tree after mirroring (Indented view):")
+        self.display_tree(self.mirror(deepcopy(self.root)))
+
+    def copy(self):
+        return deepcopy(self.root)
+
+    def display_copy(self):
+        print("Displaying the copied tree (Indented view):")
+        self.display_tree(self.copy())
+
+    def display_parents_and_children(self, root):
+        if root is not None:
+            if root.left or root.right:
+                print(f"Parent: {root.data}, ", end='')
+                if root.left:
+                    print(f"Left Child: {root.left.data}, ", end='')
+                if root.right:
+                    print(f"Right Child: {root.right.data}", end='')
+                print()
+            self.display_parents_and_children(root.left)
+            self.display_parents_and_children(root.right)
+
+    def display_all_parents_and_children(self):
+        print("All parent nodes with their children:")
+        self.display_parents_and_children(self.root)
+
+    def display_leaf_nodes(self, root):
+        if root:
+            if root.left is None and root.right is None:
+                print(root.data, end=' ')
+            self.display_leaf_nodes(root.left)
+            self.display_leaf_nodes(root.right)
+
+    def display_leaves(self):
+        print("Leaf nodes:", end=' ')
+        self.display_leaf_nodes(self.root)
+        print()
+
+    def display_levelwise(self):
+        if self.root is None:
+            print("Tree is empty")
+            return
+        print("Level-wise display of the tree:")
+        q = deque([self.root])
+        while q:
+            node = q.popleft()
+            print(node.data, end=' ')
+            if node.left:
+                q.append(node.left)
+            if node.right:
+                q.append(node.right)
+        print()
+
+    def find_min(self, root):
+        current = root
+        while current.left:
+            current = current.left
+        return current
+
+    def display_tree(self, root, space=0, level_gap=4):
+        if root is None:
+            return
+        space += level_gap
+        self.display_tree(root.right, space)
+        print()
+        print(" " * (space - level_gap) + "---" + str(root.data))
+        self.display_tree(root.left, space)
+
+def menu():
+    bst = BinarySearchTree()
+    
+    while True:
+        print("\n--- Binary Search Tree Operations ---")
+        print("1. Insert a node")
+        print("2. Delete a node")
+        print("3. Search for a node")
+        print("4. Display tree (Inorder Traversal)")
+        print("5. Display Depth of the tree")
+        print("6. Display Mirror Image of the tree")
+        print("7. Create a copy of the tree")
+        print("8. Display all parents and their children")
+        print("9. Display all leaf nodes")
+        print("10. Display tree level-wise")
+        print("11. Exit")
+
+        choice = int(input("Enter your choice (1-11): "))
+
+        if choice == 1:
+            data = int(input("Enter node value to insert: "))
+            bst.add(data)
+        elif choice == 2:
+            data = int(input("Enter node value to delete: "))
+            bst.remove(data)
+        elif choice == 3:
+            data = int(input("Enter node value to search: "))
+            result = bst.find(data)
+            if result:
+                print(f"Node {data} found.")
+            else:
+                print(f"Node {data} not found.")
+        elif choice == 4:
+            bst.display_inorder()
+        elif choice == 5:
+            bst.display_depth()
+        elif choice == 6:
+            bst.display_mirror_image()
+        elif choice == 7:
+            bst.display_copy()
+        elif choice == 8:
+            bst.display_all_parents_and_children()
+        elif choice == 9:
+            bst.display_leaves()
+        elif choice == 10:
+            bst.display_levelwise()
+        elif choice == 11:
+            print("Exiting...")
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+menu()
