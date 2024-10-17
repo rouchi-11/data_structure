@@ -1,0 +1,129 @@
+class node:
+  def __init__(self,data):
+    self.data=data
+    self.right=None
+    self.left=None
+
+class tree:
+  def __init__(self):
+    self.root=None
+
+  def insert(self,root,data):
+    new_node=node(data)
+    if self.root==None:
+      self.root=new_node
+    else:
+      if root.data<=new_node.data:
+        if root.right==None:
+          root.right=new_node
+        else:
+          self.insert(root.right,data)
+      else:
+        if root.left==None:
+          root.left=new_node
+        else:
+          self.insert(root.left,data)
+
+
+  def search(self,root,data):
+    if root==None:
+      print("Invlid data...")
+      return False
+    elif root.data==data:
+      print("Your data is found :-> ",root.data)
+      return root.data
+    elif root.data<=data:
+      return self.search(root.right,data)
+    else:
+      return self.search(root.left,data)
+
+  def preorder(self,root):
+    if self.root==None:
+      return
+    print(self.root.data)
+    self.preorder(self.root.left)
+    self.preorder(self.root.right)
+
+  def PostOrder(self,root):
+    if root==None:
+      return
+    self.PostOrder(root.left)
+    self.PostOrder(root.right)
+    print(root.data)
+
+  def inorder(self,root):
+    if root==None:
+      return
+    self.inorder(root.left)
+    print(root.data)
+    self.inorder(root.right)
+
+  def max_node(self,root):
+    if root.right==None:
+      return root.data
+    else:
+      return self.max_node(root.right)
+
+  def delete(self,root,data):
+    del_node=node(data)
+    if root==None:
+      print("Invalid")
+      return root
+
+    else:
+      if root.data<del_node.data:
+        root.right=self.delete(root.right,data)
+      elif root.data>del_node.data:
+        root.left=self.delete(root.left,data)
+      else:
+        if root.left==None and root.right==None:
+          root=None
+          return root
+
+        elif root.left==None or root.right==None:
+          if root.left==None:
+            return root.right
+          else:
+            return root.left
+        else:
+          temp=self.max_node(root.left)
+          root.data=temp
+          root.left=self.delete(root.left,temp)
+      return root
+
+
+
+def menu():
+  print("1.Insert")
+  print("2.Search")
+  print("3.Delete")
+  print("4.Preorder")
+  print("5.PostOrder")
+  print("6.Inorder")
+  print("7.Exit")
+
+
+bst=tree()
+while True:
+  menu()
+  ch=int(input("Enter your choice.."))
+  if ch==1:
+    data=int(input("Enter data :-"))
+    bst.insert(bst.root,data)
+  elif ch==2:
+     key=int(input("Enter data :-"))
+     bst.search(bst.root,key)
+  elif ch==3:
+     data=int(input("Enter data :-"))
+     bst.delete(bst.root,data)
+  elif ch==4:
+     bst.preorder(bst.root)
+  elif ch==5:
+    bst.PostOrder(bst.root)
+  elif ch==6:
+    bst.inorder(bst.root)
+  elif ch==7:
+    break
+  else:
+    print("Invalid Choice")
+
