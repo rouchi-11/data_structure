@@ -1,0 +1,173 @@
+class Node:
+    def __init__(self, key):
+        self.left = None
+        self.right = None
+        self.value = key
+
+class BinarySearchTree:
+    def __init__(self):
+        self.root = None
+
+    # a) Insert node (with duplicate handling)
+    def insert(self, key):
+        if self.root is None:
+            self.root = Node(key)
+        else:
+            self._insert(self.root, key)
+
+    def _insert(self, current, key):
+        if key < current.value:
+            if current.left is None:
+                current.left = Node(key)
+            else:
+                self._insert(current.left, key)
+        elif key > current.value:
+            if current.right is None:
+                current.right = Node(key)
+            else:
+                self._insert(current.right, key)
+        else:
+            print(f"Duplicate entry '{key}' ignored.")  # Handle duplicate
+
+    # b) Delete node
+    def delete(self, key):
+        self.root = self._delete(self.root, key)
+
+    def _delete(self, root, key):
+        if root is None:
+            return root
+        if key < root.value:
+            root.left = self._delete(root.left, key)
+        elif key > root.value:
+            root.right = self._delete(root.right, key)
+        else:
+            if root.left is None:
+                return root.right
+            elif root.right is None:
+                return root.left
+            temp_val = self._min_value_node(root.right)
+            root.value = temp_val.value
+            root.right = self._delete(root.right, temp_val.value)
+        return root
+
+    def _min_value_node(self, node):
+        current = node
+        while current.left is not None:
+            current = current.left
+        return current
+
+    # c) Search node
+    def search(self, key):
+        return self._search(self.root, key)
+
+    def _search(self, root, key):
+        if root is None or root.value == key:
+            return root
+        if key < root.value:
+            return self._search(root.left, key)
+        return self._search(root.right, key)
+
+    # d) Tree traversal (Inorder, Preorder, Postorder)
+    def inorder(self):
+        self._inorder(self.root)
+        print()
+
+    def _inorder(self, root):
+        if root:
+            self._inorder(root.left)
+            print(root.value, end=' ')
+            self._inorder(root.right)
+
+    def preorder(self):
+        self._preorder(self.root)
+        print()
+
+    def _preorder(self, root):
+        if root:
+            print(root.value, end=' ')
+            self._preorder(root.left)
+            self._preorder(root.right)
+
+    def postorder(self):
+        self._postorder(self.root)
+        print()
+
+    def _postorder(self, root):
+        if root:
+            self._postorder(root.left)
+            self._postorder(root.right)
+            print(root.value, end=' ')
+
+    # e) Display depth of the tree
+    def depth(self):
+        return self._depth(self.root)
+
+    def _depth(self, root):
+        if root is None:
+            return 0
+        left_depth = self._depth(root.left)
+        right_depth = self._depth(root.right)
+        return max(left_depth, right_depth) + 1
+
+    # f) Display mirror image of the tree
+    def mirror(self):
+        self._mirror(self.root)
+
+    def _mirror(self, root):
+        if root:
+            root.left, root.right = root.right, root.left
+            self._mirror(root.left)
+            self._mirror(root.right)
+
+    # g) Create a copy of the tree
+    def copy_tree(self):
+        return self._copy_tree(self.root)
+
+    def _copy_tree(self, root):
+        if root is None:
+            return None
+        new_root = Node(root.value)
+        new_root.left = self._copy_tree(root.left)
+        new_root.right = self._copy_tree(root.right)
+        return new_root
+
+    # h) Display all parent nodes with their child nodes
+    def display_parents_with_children(self):
+        self._display_parents_with_children(self.root)
+
+    def _display_parents_with_children(self, root):
+        if root:
+            print(f"Parent: {root.value}", end=' ')
+            if root.left:
+                print(f"Left child: {root.left.value}", end=' ')
+            if root.right:
+                print(f"Right child: {root.right.value}", end=' ')
+            print()
+            self._display_parents_with_children(root.left)
+            self._display_parents_with_children(root.right)
+
+    # i) Display all leaf nodes
+    def display_leaf_nodes(self):
+        self._display_leaf_nodes(self.root)
+        print()
+
+    def _display_leaf_nodes(self, root):
+        if root:
+            if root.left is None and root.right is None:
+                print(root.value, end=' ')
+            self._display_leaf_nodes(root.left)
+            self._display_leaf_nodes(root.right)
+
+    # j) Display tree level-wise
+    def display_level_wise(self):
+        if self.root is None:
+            return
+        queue = [self.root]
+        while queue:
+            node = queue.pop(0)
+            print(node.value, end=' ')
+            if node.left:
+                queue.append(node.left)
+            if node.right:
+                queue.append(node.right)
+        print()
